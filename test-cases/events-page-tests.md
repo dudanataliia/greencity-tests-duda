@@ -1,39 +1,7 @@
 # Events Page Tests
 
-## Test Case 1
-**Title:** Відкриття сторінки подій
-
-**Preconditions:**
-- Користувач має доступ до інтернету.
-- Браузер відкритий та працездатний.
-
-| Step | Action | Data | Expected Result |
-|---|---|---|---|
-| 1 | Відкрити браузер | - | Браузер успішно відкрився |
-| 2 | Перейти за посиланням сторінки подій | https://www.greencity.cx.ua/#/greenCity/events | Сторінка подій завантажилась без помилок |
-| 3 | Перевірити наявність списку подій | - | На сторінці відображається перелік подій або повідомлення про їх відсутність |
-
-## Test Case 2
-**Title:** Перегляд детальної інформації про подію
-
-**Preconditions:**
-- Користувач знаходиться на сторінці подій.
-- У списку є щонайменше одна подія.
-
-| Step | Action | Data | Expected Result |
-|---|---|---|---|
-| 1 | Відкрити сторінку подій | https://www.greencity.cx.ua/#/greenCity/events | Список подій відображається |
-| 2 | Натиснути на будь-яку картку події | Назва будь-якої доступної події | Відкривається сторінка/модальне вікно з деталями події |
-| 3 | Перевірити основні поля події | Назва, дата, опис, місце (за наявності) | Поля відображаються коректно та читабельно |
-
-## Test Case 3
-**Title:** Повернення зі сторінки деталей до списку подій
-
-**Preconditions:**
-- Користувач відкрив деталі будь-якої події.
-
-| Step | Action | Data | Expected Result |
-|---|---|---|---|
-| 1 | Відкрити деталі події | Будь-яка подія зі списку | Відображаються деталі вибраної події |
-| 2 | Натиснути кнопку повернення або використати навігацію браузера "Назад" | - | Користувач повертається до списку подій |
-| 3 | Перевірити стан сторінки | - | Список подій знову доступний для перегляду та взаємодії |
+| # | Title | Preconditions | Test Steps | Data | Expected result |
+|---|---|---|---|---|---|
+| Test case 1 | Verify Filter by Past events | User is not logged in.<br>User is on the Events page.<br>https://www.greencity.cx.ua/#/greenCity/events<br>Past and Upcoming Events data is available. | 1. Click on `Event time` filter option and mark check box for the Past filter to show past events.<br>2. Scroll page up and down.<br>3. Observe the displayed list of events. | Windows: Windows 10 Pro<br>Chrome: 146.0.7680.80<br>Laptop: LENOVO, 15.6<br>Resolution: 1920x1080 | Past Events Filter Check box was marked in green and the Event time Filter was closed.<br>Past events green icon appears at the right side above the events list.<br>Only events with past dates are displayed.<br>The Counter above the events list shows count for past events.<br>No upcoming events are shown.<br>Each displayed event has a date earlier than the current date.<br>The filter is applied correctly without errors or data inconsistencies. |
+| Test case 2 | Verify Reset Past events Filter | User is not logged in.<br>User is on the Events page.<br>https://www.greencity.cx.ua/#/greenCity/events<br>Past and Upcoming Events data is available.<br>The Past event filter is applied (Click on `Event time` filter option and mark check box for the Past filter to show past events).<br>Only past events are currently displayed. | 1. Click on close icon on the Past filter green icon at the right side above the events list.<br>2. Scroll page up and down.<br>3. Observe the events list. | Windows: Windows 10 Pro<br>Chrome: 146.0.7680.80<br>Laptop: LENOVO, 15.6<br>Resolution: 1920x1080 | The Past Events filter is removed.<br>Events list refreshed to show all events (past and upcoming).<br>The Counter above the events list shows count for all events.<br>No filters remain active. |
+| Test case 3 | Verify Change View Between Card and List Layout | User is not logged in.<br>User is on the Events page.<br>https://www.greencity.cx.ua/#/greenCity/events<br>Events data is available. | 1. Click on the `List View` (row view) button.<br>2. Verify that events are displayed in a list (each event in a separate row).<br>3. Scroll events list up and down and verify all events from test data are loaded and the list remains in correct List view.<br>4. Click on the `Card View` button.<br>5. Verify that events are displayed as cards and switch back to `Card View`.<br>6. Scroll events list up and down and verify all events from test data are loaded and the list remains in correct Grid view. | Windows: Windows 10 Pro<br>Chrome: 146.0.7680.80<br>Laptop: LENOVO, 15.6<br>Resolution: 1920x1080 | Events are correctly displayed in list layout after selecting `List View`.<br>Events are correctly displayed in card layout after selecting `Card View`.<br>Switching between views works without page reload or data loss. |
