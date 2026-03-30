@@ -1,9 +1,10 @@
 # greencity-tests-duda
 
 ## Опис завдання
-У цьому репозиторії додано 3 тест-кейси для тестування сторінки Events сайту GreenCity.  
+У цьому репозиторії додано 4 тест-кейси для тестування сторінки Events сайту GreenCity.  
 Тест-кейси оформлено у форматі Markdown з єдиною структурою:
 
+- Test case number
 - Title
 - Preconditions
 - Test Steps
