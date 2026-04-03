@@ -1,8 +1,8 @@
 # greencity-tests-duda
 
-## Опис завдання
-У цьому репозиторії додано 4 тест-кейси для тестування сторінки Events сайту GreenCity.  
-Тест-кейси оформлено у форматі Markdown з єдиною структурою:
+## Task Description
+This repository contains 4 test cases created for testing the Events page of the GreenCity website.
+The test cases are written in Markdown format using a consistent structure:
 
 - Test case number
 - Title
@@ -11,10 +11,8 @@
 - Data
 - Expected Result
   
-## Сторінка, що тестується
+## Page Under Test
 [GreenCity Events](https://www.greencity.cx.ua/#/greenCity/events)
 
-## Автор роботи
+## Author
 Duda Nataliia
-
-
