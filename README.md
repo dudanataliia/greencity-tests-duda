@@ -6,8 +6,7 @@ This repository contains **manual test cases** (Markdown) and **automated UI tes
 
 Manual test cases follow a consistent structure (number, title, preconditions, steps, data, expected result) and are stored in `test-cases/events-page-tests.md`.
 
-Automated tests use **Python**, **Selenium WebDriver**, and **`unittest`** (no `pytest`, no Page Object pattern).
-
+Automated tests use **Python**,and **Selenium WebDriver**
 The repository contains:
 
 - **Manual test cases**: `test-cases/events-page-tests.md`
