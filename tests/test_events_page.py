@@ -1,24 +1,4 @@
-"""
-Автотести сторінки Events (GreenCity).
-
-Вимоги курсу: Python + Selenium + unittest (без pytest / Page Object); setUp/tearDown;
-очікування через WebDriverWait; без time.sleep у тестах.
-
-Фіналізовано: TC1–TC4.
-
-TC1: test_tc1_verify_filter_by_past_events — фільтр Past.
-TC2: test_tc2_verify_reset_past_events_filter — скидання фільтра Past (хрестик img.cross-img).
-TC3: test_tc3_verify_change_view_between_card_and_list_layout — List view / Card view.
-TC4: test_tc4_search_non_existing_value — пошук → `.active-filter-list p` (0 items) + empty message.
-
-Запуск одного тесту:
-  python -m unittest tests.test_events_page.TestEventsPage.test_tc1_verify_filter_by_past_events -v
-  python -m unittest tests.test_events_page.TestEventsPage.test_tc2_verify_reset_past_events_filter -v
-  python -m unittest tests.test_events_page.TestEventsPage.test_tc3_verify_change_view_between_card_and_list_layout -v
-  python -m unittest tests.test_events_page.TestEventsPage.test_tc4_search_non_existing_value -v
-Усі тести класу:
-  python -m unittest discover tests -v
-"""
+"""GreenCity Events page — four Selenium/unittest tests (TC1–TC4). See README.md for setup and commands."""
 import unittest
 from pathlib import Path
 
@@ -129,7 +109,7 @@ class TestEventsPage(unittest.TestCase):
         except Exception:
             self.driver.execute_script("arguments[0].click();", open_menu)
 
-        # Один WebDriverWait замість 7×5 с на окремі локатори (раніше могло бути до ~35 с).
+        # Single WebDriverWait for EN option (avoids many short timeouts).
         en_xpath = (
             "//mat-option[.//span[normalize-space()='En']]"
             " | //*[contains(@class,'cdk-overlay-pane')]//span[normalize-space()='En']"
@@ -202,7 +182,7 @@ class TestEventsPage(unittest.TestCase):
             self.fail("Past filter option was not found.")
 
     def _apply_past_filter_and_scroll(self):
-        """Спільні кроки TC1/TC2: застосувати Past і проскролити сторінку."""
+        """TC1/TC2: apply Past filter and scroll the page."""
         self.wait.until(lambda d: "events" in d.current_url.lower())
         self._enable_past_filter()
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -220,7 +200,7 @@ class TestEventsPage(unittest.TestCase):
         )
 
     def _click_close_past_filter_chip(self):
-        """Клік по хрестику: img.cross-img у div.cross-container (зелений чіп Past)."""
+        """Close Past chip: img.cross-img in div.cross-container."""
         close_locators = [
             (By.CSS_SELECTOR, "div.active-filter-container img.cross-img"),
             (By.CSS_SELECTOR, "div.active-filter-container img[alt='cross']"),
@@ -233,7 +213,7 @@ class TestEventsPage(unittest.TestCase):
                 By.XPATH,
                 "//div[contains(@class,'cross-container')]//img[@alt='cross' or contains(@class,'cross-img')]",
             ),
-            # fallback: кнопка / mat-chip, якщо верстка зміниться
+            # fallback: button / mat-chip if markup changes
             (
                 By.CSS_SELECTOR,
                 "div.active-filter-container div.chips div.active-filter button",
@@ -263,8 +243,7 @@ class TestEventsPage(unittest.TestCase):
     def _click_events_view_mode(self, mode):
         """
         mode: 'list' | 'card'
-        Розмітка сайту: div.change-view — button.list (aria-label list view),
-        button.gallery (aria-label table view) — сітка / «картки».
+        Site: div.change-view — button.list (list view), button.gallery (table/card grid).
         """
         locators = []
         if mode == "list":
@@ -274,7 +253,7 @@ class TestEventsPage(unittest.TestCase):
                 (By.XPATH, "//button[contains(@class,'list')][contains(@aria-label,'list view')]"),
             ]
         else:
-            # У тест-кейсі «Card view»; на сайті — gallery / table view
+            # Case says "Card view"; site uses gallery / table view
             locators = [
                 (By.CSS_SELECTOR, "div.change-view button.gallery"),
                 (By.CSS_SELECTOR, "button[aria-label='table view']"),
@@ -298,7 +277,7 @@ class TestEventsPage(unittest.TestCase):
         self.fail(f"Could not find or click '{mode}' view button: {last_error!r}")
 
     def _assert_list_layout_active(self):
-        """Кнопка List активна: aria-pressed=true на button.list."""
+        """List layout: aria-pressed=true on button.list."""
         WebDriverWait(self.driver, 12).until(
             EC.presence_of_element_located(
                 (
@@ -310,7 +289,7 @@ class TestEventsPage(unittest.TestCase):
         )
 
     def _assert_card_layout_active(self):
-        """Сітка (gallery): aria-pressed=true на button.gallery (aria-label table view)."""
+        """Card/grid layout: aria-pressed=true on button.gallery (table view)."""
         WebDriverWait(self.driver, 12).until(
             EC.presence_of_element_located(
                 (
@@ -367,20 +346,8 @@ class TestEventsPage(unittest.TestCase):
 
     def test_tc2_verify_reset_past_events_filter(self):
         """
-        Test case 2 (фінальна версія): Verify Reset Past events Filter.
-
-        Preconditions: як у setUp() (браузер, сторінка Events, EN за можливості).
-
-        Steps:
-        1–3. Як у TC1: відкрити Event time → Past → скрол вниз/вгору (переконатися, що Past застосовано).
-        4. Клік по іконці закриття на зеленому чіпі Past.
-        5. Скрол вниз і вгору.
-        6. Перевірити список / стан фільтрів.
-
-        Expected:
-        - чіп Past знято;
-        - лічильник оновився (інший текст, ніж зі ввімкненим Past);
-        - у блоці активних фільтрів немає Past.
+        TC2: Reset Past filter — same as TC1 to apply Past, then close Past chip, scroll,
+        assert chip gone and counter text changes.
         """
         self._save_step_screenshot("tc2_step_before_actions")
 
@@ -437,18 +404,7 @@ class TestEventsPage(unittest.TestCase):
 
     def test_tc3_verify_change_view_between_card_and_list_layout(self):
         """
-        Test case 3: Verify Change View Between Card and List Layout.
-
-        UI: div.change-view — button.list (aria-label list view), button.gallery (aria-label table view).
-        Перевірка стану: aria-pressed на активній кнопці.
-
-        Steps:
-        1. List view — клік button.list, перевірка aria-pressed.
-        2. Скрол, знову перевірка list.
-        3. Сітка (картки) — клік button.gallery, перевірка aria-pressed.
-        4. Скрол, знову перевірка gallery.
-
-        Assertions: той самий origin URL (без повного переходу з сайту).
+        TC3: List vs card/grid view (div.change-view), aria-pressed on active button, scroll, same URL origin.
         """
         self.wait.until(lambda d: "events" in d.current_url.lower())
         url_before = self.driver.current_url
@@ -485,7 +441,7 @@ class TestEventsPage(unittest.TestCase):
         self._save_step_screenshot("tc3_assertions_passed")
 
     def _events_search_input_locators(self):
-        """Поле після розгортання: input.place-input у div.container-input (create-container / top-header)."""
+        """Expanded search field: input.place-input under div.container-input."""
         return [
             (By.CSS_SELECTOR, "div.create-container input.place-input"),
             (By.CSS_SELECTOR, "input.place-input"),
@@ -497,9 +453,7 @@ class TestEventsPage(unittest.TestCase):
         ]
 
     def _expand_events_search_field(self):
-        """
-        Спочатку показується лише іконка лупи (div.container-img); після кліку розгортається input.place-input.
-        """
+        """Click search icon (div.container-img) to expand input.place-input."""
         icon_locators = [
             (By.CSS_SELECTOR, "div.create-container div.container-img"),
             (By.CSS_SELECTOR, "div.top-header div.create-container div.container-img"),
@@ -525,7 +479,7 @@ class TestEventsPage(unittest.TestCase):
         )
 
     def _wait_interactable_search_input(self):
-        """Після кліку по іконці поле має стати клікабельним; інакше send_keys дає ElementNotInteractableException."""
+        """Wait until input is clickable after expanding (avoids ElementNotInteractableException)."""
         last_error = None
         for by, value in self._events_search_input_locators():
             try:
@@ -540,7 +494,7 @@ class TestEventsPage(unittest.TestCase):
         self.fail(f"Search input not interactable after expanding (place-input): {last_error!r}")
 
     def _open_search_and_type(self, query):
-        """Клік по іконці лупи → розгортання поля → ввід тексту → Enter."""
+        """Expand search field, type query, press Enter."""
         self._expand_events_search_field()
         inp = self._wait_interactable_search_input()
         try:
@@ -555,10 +509,7 @@ class TestEventsPage(unittest.TestCase):
         inp.send_keys(Keys.ENTER)
 
     def _wait_tc4_zero_counter_paragraph(self):
-        """
-        Лічильник над списком: зазвичай div.active-filter-container → div.active-filter-list → p
-        з текстом на кшталт «0 items found» (у DOM можуть бути відступи в класах — перебираємо p у блоці).
-        """
+        """Wait for counter <p> under .active-filter-container / .active-filter-list (e.g. 0 items found)."""
         def _pick(d):
             for el in d.find_elements(
                 By.CSS_SELECTOR,
@@ -577,15 +528,7 @@ class TestEventsPage(unittest.TestCase):
 
     def test_tc4_search_non_existing_value(self):
         """
-        Test case 4: Search not existing value.
-
-        Steps:
-        1. Клік по іконці пошуку (div.container-img у create-container).
-        2. У розгорнуте поле input.place-input ввести `-12!@#$%^&*`.
-
-        Expected:
-        - лічильник над списком: `div.active-filter-container` → `div.active-filter-list` → `p` (0 items);
-        - повідомлення в контенті, що за цим пошуком нічого не знайдено.
+        TC4: Search for nonsense string; assert empty message and zero counter in filter bar.
         """
         self.wait.until(lambda d: "events" in d.current_url.lower())
         WebDriverWait(self.driver, 15).until(
@@ -598,7 +541,7 @@ class TestEventsPage(unittest.TestCase):
         self._open_search_and_type("-12!@#$%^&*")
         self._save_step_screenshot("tc4_after_typing")
 
-        # 1) Спочатку центральне повідомлення (Angular оновлює лічильник трохи пізніше)
+        # 1) Empty-state message first (counter may update slightly later)
         empty_msg_xpath = (
             "//*[contains(., 'matching to this search')]"
             " | //*[contains(., 'find any results')]"
@@ -610,7 +553,7 @@ class TestEventsPage(unittest.TestCase):
             EC.presence_of_element_located((By.XPATH, empty_msg_xpath))
         )
 
-        # 2) Лічильник прив’язаний до .active-filter-container / .active-filter-list (див. DevTools — <p> 0 items found)
+        # 2) Counter <p> in .active-filter-list (e.g. 0 items found)
         counter_p = self._wait_tc4_zero_counter_paragraph()
         counter_text = (counter_p.text or "").strip().lower()
         self.assertIn("0", counter_text, "Counter <p> should show zero.")
