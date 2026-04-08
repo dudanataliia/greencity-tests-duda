@@ -1,5 +1,13 @@
 # Events Page Tests
 
+**TC1 — автотест (фінальна версія):** `tests/test_events_page.py` → `test_tc1_verify_filter_by_past_events`.
+
+**TC2 — автотест (фінальна версія):** `tests/test_events_page.py` → `test_tc2_verify_reset_past_events_filter` (кроки як у TC1, потім хрестик на чіпі Past `img.cross-img`, скрол, перевірки).
+
+**TC3 — автотест:** `tests/test_events_page.py` → `test_tc3_verify_change_view_between_card_and_list_layout` (List view → скрол → Card view → скрол + перевірки розмітки).
+
+**TC4 — автотест:** `tests/test_events_page.py` → `test_tc4_search_non_existing_value` (іконка пошуку → `-12!@#$%^&*` → empty message + 0 items).
+
 | # | Title | Preconditions | Test Steps | Data | Expected result |
 |---|---|---|---|---|---|
 | Test case 1 | Verify Filter by Past events | User is not logged in.<br>User is on the Events page.<br>https://www.greencity.cx.ua/#/greenCity/events<br>Past and Upcoming Events data is available. | 1. Click on `Event time` filter option and mark check box for the Past filter to show past events.<br>2. Scroll page up and down.<br>3. Observe the displayed list of events. | Windows: Windows 10 Pro<br>Chrome: 146.0.7680.80<br>Laptop: LENOVO, 15.6<br>Resolution: 1920x1080 | Past Events Filter Check box was marked in green and the Event time Filter was closed.<br>Past events green icon appears at the right side above the events list.<br>Only events with past dates are displayed.<br>The Counter above the events list shows count for past events.<br>No upcoming events are shown.<br>Each displayed event has a date earlier than the current date.<br>The filter is applied correctly without errors or data inconsistencies. |
