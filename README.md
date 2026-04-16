@@ -7,11 +7,31 @@ This repository contains 4 **manual test cases** (Markdown) and 4 **automated UI
 | Location | Content |
 |----------|---------|
 | `test-cases/events-page-tests.md` | Manual test cases (table: preconditions, steps, data, expected result) |
-| `tests/test_events_page.py` | Four automated tests (`unittest` + Selenium) |
+| `pages/events_page.py` | Page Object with locators and interactions for Events page |
+| `tests/test_events_page.py` | Four automated tests (`unittest`) that use the Page Object |
 | `requirements.txt` | Python dependencies |
 
+**Stack:** Python, Selenium WebDriver, standard **`unittest`**, and **Page Object pattern** (no `pytest`).  
+Tests use **`setUp` / `tearDown`**, **`WebDriverWait`** / explicit waits, and avoid `time.sleep` in test code.
 **Testing page:** [GreenCity Events](https://www.greencity.cx.ua/#/greenCity/events)
 
+
+## Repository structure
+
+```text
+greencity-tests/
+├── README.md
+├── requirements.txt
+├── test-cases/
+│   └── events-page-tests.md
+├── pages/
+│   ├── __init__.py
+│   └── events_page.py
+└── tests/
+    └── test_events_page.py
+```
+
+---
 
 ## How to run tests
 
